@@ -10,8 +10,8 @@ ENV JAVA_OPTS "-Djenkins.install.runSetupWizard=false"
 # defines users
 ENV JENKINS_ADMIN admin
 ENV JENKINS_ADMIN_PASS TEST
-ENV JENKINS_USER user
-ENV JENKINS_USER_PASS TEST
+ENV JENKINS_USER ""
+ENV JENKINS_USER_PASS ""
 
 # creating default users
 COPY create_user.groovy /usr/share/jenkins/ref/init.groovy.d/
