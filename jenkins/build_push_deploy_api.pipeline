@@ -1,0 +1,20 @@
+node('master') {
+   stage('Checkout') {
+     // Clean workspace and checkout shared library repository on the jenkins master
+     cleanWs()
+     checkout scm
+   }
+
+   stage('Build') {
+     sh("echo build")
+   }
+
+   stage('Push') {
+        sh("echo build")
+	 }
+
+   stage('Deploy to local Swarm') {
+			sh("echo deploy to local swarm")
+   }
+	//TODO deploy to GCP, alternatively
+ }

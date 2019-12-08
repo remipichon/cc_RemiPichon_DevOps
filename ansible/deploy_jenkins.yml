@@ -1,5 +1,5 @@
 
-- hosts: 127.0.0.1
+- hosts: all
   become: yes
 
   tasks:
@@ -23,10 +23,22 @@
         push: yes
         source: build
 
+    - name: Docker Volume for Jenkins
+      docker_volume:
+        name: jenkins_home
+
     - name: Start Jenkins on Swarm
       docker_swarm_service:
         name: jenkins
         image: 127.0.0.1:5000/jenkins
+        placement:
+          constraints:
+#             the volume has been created on the leader
+            - node.role == manager
+        mounts:
+          - source: jenkins_home
+            target: /var/jenkins_home
+            type: volume
         publish:
           - published_port: 8080
             target_port: 8080
