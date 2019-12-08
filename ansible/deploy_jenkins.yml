@@ -1,0 +1,32 @@
+
+- hosts: 127.0.0.1
+  become: yes
+
+  tasks:
+    - name: install Pip
+      apt:
+        state: latest
+        name: python-pip
+
+    - name: install Docker Python lib
+      pip:
+        name:
+          - docker
+          - requests>=2.20.1
+
+    - name: Build Jenkins
+      docker_image:
+        build:
+          path: /vagrant/jenkins
+          pull: yes
+        name: 127.0.0.1:5000/jenkins
+        push: yes
+        source: build
+
+    - name: Start Jenkins on Swarm
+      docker_swarm_service:
+        name: jenkins
+        image: 127.0.0.1:5000/jenkins
+        publish:
+          - published_port: 8080
+            target_port: 8080
