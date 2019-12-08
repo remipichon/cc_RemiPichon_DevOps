@@ -37,3 +37,14 @@ Again, please don't hesitate to reach out to the team at devops@zenhub.com with 
 # Going Forward
 
 * a separate repo for the app from the DevOps tooling (Jenkins, Terraform)
+
+
+# Getting Started
+
+* install Vagrant
+* install VirtualBox
+
+```
+VAGRANT_VAGRANTFILE=Vagrantfile.rb vagrant up
+VAGRANT_VAGRANTFILE=Vagrantfile.rb vagrant ssh
+```
