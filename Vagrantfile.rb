@@ -13,22 +13,21 @@ end
 
 # Prepare Docker
 Vagrant.configure("2") do |config|
-	# blank playbook to force Vagrant to install Ansible
+	# blank playbook install Ansible and its role
 	config.vm.provision "ansible_local" do |ansible|
 		ansible.playbook = "ansible/blank.yml"
+			ansible.become = true
+      ansible.galaxy_role_file = "ansible/requirements.yml"
+      ansible.galaxy_roles_path = "/etc/ansible/roles"
+      ansible.galaxy_command = "sudo ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
 	end
 
-	# install roles
-	config.vm.provision "shell", inline: <<-SHELL
-		ansible-galaxy install -r /vagrant/ansible/requirements.yml
-	SHELL
-
-	# install Docker and setup Swarm
+ 	# install Docker and setup Swarm
 	config.vm.provision "ansible_local" do |ansible|
 		ansible.playbook = "ansible/install_docker.yml"
 	end
 	config.vm.provision "ansible_local" do |ansible|
-  		ansible.playbook = "ansible/init_swarm.yml"
+  	ansible.playbook = "ansible/init_swarm.yml"
   end
 end
 
