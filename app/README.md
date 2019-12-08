@@ -32,8 +32,3 @@ Here is a breakdown of a few things that we would like to see:
 We are going to make the assumption that you are aware of some of the other facets of operations, and we are not asking or expecting you to implement any monitoring, alerting, or that kind of thing into the exercise. It would be _extremely_ helpful for us while you are going through the exercise to document your thought process and what you are planning, or the types of things you’d take into account if this were a production application.
 
 Again, please don't hesitate to reach out to the team at devops@zenhub.com with any questions.  Good luck!
-
-
-# Going Forward
-
-* a separate repo for the app from the DevOps tooling (Jenkins, Terraform)
