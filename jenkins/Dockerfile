@@ -25,8 +25,8 @@ ENV JENKINS_USER_PASS ""
 # creating default users
 COPY create_user.groovy /usr/share/jenkins/ref/init.groovy.d/
 COPY create_pipeline_seeder.groovy /usr/share/jenkins/ref/init.groovy.d/
-COPY pipeline_seeder.pipeline /usr/share/jenkins/ref/init.groovy.d/
-COPY build_push_deploy_api.pipeline /usr/share/jenkins/ref/init.groovy.d/
+COPY pipeline_seeder.pipeline.groovy /var/jenkins_home/
+COPY build_push_deploy_api.pipeline.groovy /var/jenkins_home/
 
 # Jenkins settings
 VOLUME /var/jenkins_home
