@@ -2,4 +2,4 @@ git
 matrix-auth
 job-dsl
 pipeline-stage-view
-pipeline
+workflow-aggregator

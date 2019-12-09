@@ -13,6 +13,10 @@ RUN curl https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKERV
 #RUN usermod -a -G root jenkins
 #USER jenkins
 
+# install Google Cloud Cli
+COPY install_gcp_cli.sh install_gcp_cli.sh
+RUN ./install_gcp_cli.sh
+
 # skip setup wizard
 ENV JAVA_OPTS "-Djenkins.install.runSetupWizard=false"
 
