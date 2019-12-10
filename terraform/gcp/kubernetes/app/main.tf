@@ -24,6 +24,7 @@ resource "kubernetes_replication_controller" "api" {
         port {
           container_port = 3000
         }
+        //--priviledged
 
         resources {
           requests {
@@ -74,32 +75,4 @@ resource "google_dns_record_set" "api" {
 
 output "endpoint" {
   value = "${kubernetes_service.api.load_balancer_ingress[0].ip}"
-}
-
-//TODO https
-resource "kubernetes_ingress" "example_ingress" {
-  metadata {
-    name = "api-api-ingress"
-  }
-
-  spec {
-    backend {
-      service_name = "${var.service_name}"
-      service_port = "80"
-    }
-
-//    tls {
-//      secret_name = "tls-secret"
-//    }
-  }
-}
-
-resource "google_compute_managed_ssl_certificate" "main" {
-  provider = google-beta
-
-  name = "app-api-cert"
-
-  managed {
-    domains = ["${var.service_name}.${var.dns_name}"]
-  }
 }

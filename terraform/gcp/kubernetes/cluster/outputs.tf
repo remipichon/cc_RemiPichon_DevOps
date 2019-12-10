@@ -25,3 +25,7 @@ output "username" {
 output "password" {
   value = "${random_string.random.result}"
 }
+
+output "cluster" {
+  value = "${google_container_cluster.cluster}"
+}

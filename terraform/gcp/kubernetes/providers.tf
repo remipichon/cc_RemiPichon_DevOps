@@ -6,18 +6,8 @@ provider "kubernetes" {
   cluster_ca_certificate = "${base64decode(module.cluster.cluster_ca_certificate)}"
 }
 
-//create project from console
 provider "google" {
-  //TODO read that from env or conf
-  project     = "zenhubviaconsole"
-  region      = "europe-west1"
-  zone      = "europe-west1-b"
-}
-
-
-provider "google-beta" {
-  //TODO read that from env or conf
-  project     = "zenhubviaconsole"
-  region = "us-central1"
-  zone   = "us-central1-a"
+  project     = "${var.project}"
+  region = "${var.region}"
+  zone   = "${var.zone}"
 }

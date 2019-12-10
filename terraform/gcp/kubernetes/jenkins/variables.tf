@@ -13,3 +13,6 @@ resource "random_string" "random" {
   length = 64
   special = true
 }
+
+variable "gcp_project" {}
+variable "app_repo" {}

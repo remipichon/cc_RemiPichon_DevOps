@@ -14,7 +14,7 @@ resource "google_container_cluster" "cluster" {
   }
 
   node_config {
-    disk_size_gb = 30
+    disk_size_gb = 50
     machine_type = "g1-small"
     preemptible = true
     oauth_scopes = [
@@ -25,6 +25,8 @@ resource "google_container_cluster" "cluster" {
       "https://www.googleapis.com/auth/servicecontrol",
       "https://www.googleapis.com/auth/trace.append",
       "https://www.googleapis.com/auth/compute",
+      //TODO hum....
+      "https://www.googleapis.com/auth/cloud-platform"
       //TODO understand this and add scopes to push to GCR and update an app (for jenkins)
     ]
   }
