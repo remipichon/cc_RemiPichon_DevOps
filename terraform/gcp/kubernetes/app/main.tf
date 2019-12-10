@@ -55,6 +55,7 @@ resource "kubernetes_service" "api" {
     type = "LoadBalancer"
 
     port {
+      target_port = 3000
       port = 80
     }
   }
