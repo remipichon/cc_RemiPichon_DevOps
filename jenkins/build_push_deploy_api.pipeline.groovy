@@ -1,16 +1,10 @@
 pipeline {
   parameters {
+    //TODO this should be injected via env
     choice(
       choices: ['swarm', 'gcp'],
       description: 'Either deploy on Docker Swarm on which Jenkins is running or to Google Cloud',
       name: 'DEPLOY_TARGET'
-    )
-    //TODO this one should be set by Terraform via env
-    string(
-      // Jenkins should have all the required permissions to access GCP CLI
-      description: 'Google Cloud project name',
-      defaultValue: 'zenhubviaconsole',
-      name: 'GCP_PROJECT'
     )
     string(
       // Jenkins should have all the required permissions to access GCP CLI
@@ -18,18 +12,13 @@ pipeline {
       defaultValue: 'app_api',
       name: 'APP_NAME'
     )
-    string(
-      description: 'required: Git repository with the application code (in app directory)',
-      defaultValue: "https://github.com/remipichon/cc_RemiPichon_DevOps.git",
-      name: 'REPO'
-    )
   }
 
   agent any
   stages {
     stage('Checkout source') {
       steps {
-        git branch: "master", url: params.REPO
+        git branch: "master", url: env.APP_REPO
       }
     }
 
@@ -38,11 +27,11 @@ pipeline {
         expression { params.DEPLOY_TARGET == 'swarm' }
       }
       steps {
+        sh "service docker start"
         dir('app') {
           script {
             docker.withServer('unix:///var/run/docker.sock') {
               def customImage = docker.build("127.0.0.1:5000/" + params.APP_NAME)
-              // todo push a revelant tag
               customImage.push()
             }
           }
@@ -55,12 +44,12 @@ pipeline {
         expression { params.DEPLOY_TARGET == 'gcp' }
       }
       steps {
+        sh "service docker start"
         sh "gcloud auth configure-docker"
         dir('app') {
           script {
             docker.withServer('unix:///var/run/docker.sock') {
-              def customImage = docker.build("gcr.io/" + params.GCP_PROJECT + "/" + params.APP_NAME)
-              // todo push a revelant tag
+              def customImage = docker.build("gcr.io/" + env.GCP_PROJECT + "/" + params.APP_NAME)
               customImage.push()
             }
           }
@@ -89,7 +78,10 @@ pipeline {
         expression { params.DEPLOY_TARGET == 'gcp' }
       }
       steps {
-        sh 'kubectl rollout restart replicationcontrollers/' + params.APP_NAME
+        //tODO get zone from env
+        sh 'gcloud container clusters get-credentials main-cluster --zone us-central1-a'
+        //TODO ci app_name c'est api
+        sh 'kubectl rolling-update ' + params.APP_NAME + ' --image-pull-policy Always --image gcr.io/' + env.GCP_PROJECT + "/" + params.APP_NAME
       }
     }
 
