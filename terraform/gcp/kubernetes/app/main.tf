@@ -8,12 +8,17 @@ resource "kubernetes_replication_controller" "api" {
     }
   }
 
+  lifecycle {
+    //spec.selector.deployment is updated by K8s when doing a rolling update
+    ignore_changes = ["spec[0].selector"]
+  }
+
   spec {
     replicas = 1
 
     selector = {
       app  = "${var.service_name}"
-      tier = "frontend"
+      tier = "api"
     }
 
     template {
@@ -24,7 +29,6 @@ resource "kubernetes_replication_controller" "api" {
         port {
           container_port = 3000
         }
-        //--priviledged
 
         resources {
           requests {
@@ -50,7 +54,7 @@ resource "kubernetes_service" "api" {
   spec {
     selector = {
       app  = "${var.service_name}"
-      tier = "frontend"
+      tier = "api"
     }
 
     type = "LoadBalancer"

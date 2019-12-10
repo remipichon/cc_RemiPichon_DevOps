@@ -42,3 +42,11 @@
         publish:
           - published_port: 8080
             target_port: 8080
+        env:
+          JENKINS_ADMIN_PASS: adminp@ass
+          DEPLOY_TARGET: swarm
+          APP_SOURCE_REPO: https://github.com/remipichon/cc_RemiPichon_DevOps
+          APP_IMAGE_NAME: jenkins
+          APP_SERVICE_NAME: jenkins
+        privileged: true
+

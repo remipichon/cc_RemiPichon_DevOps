@@ -20,12 +20,12 @@ resource "kubernetes_replication_controller" "jenkins" {
       volume {
         name = "google-cloud-key"
         secret {
-          secret_name = "pubsub-key" //TODO WROONG NAME
+          secret_name = "${kubernetes_secret.example.metadata[0].name}"
         }
       }
 
       container {
-        image = "${local.gcr_url}/${var.image_name}"
+        image = "${var.image_url}"
         name  = "${var.service_name}-jenkins"
 
         port {
@@ -43,7 +43,7 @@ resource "kubernetes_replication_controller" "jenkins" {
 
         env {
           name = "GOOGLE_APPLICATION_CREDENTIALS"
-          value = "/var/secrets/google/zenhub_travis_key.json"
+          value = "/var/secrets/google/${local.service_account_key_name_in_secret}"
         }
 
         env {
@@ -57,8 +57,33 @@ resource "kubernetes_replication_controller" "jenkins" {
         }
 
         env {
-          name = "APP_REPO"
-          value = "${var.app_repo}"
+          name = "DEPLOY_TARGET"
+          value = "gcp"
+        }
+
+        env {
+          name = "APP_SOURCE_REPO"
+          value = "${var.app_source_repo}"
+        }
+
+        env {
+          name = "CLUSTER_NAME"
+          value = "???"
+        }
+
+        env {
+          name = "ZONE"
+          value = ""
+        }
+
+        env {
+          name = "APP_IMAGE_NAME"
+          value = "${var.app_image_name}"
+        }
+
+        env {
+          name = "APP_SERVICE_NAME"
+          value = "${var.app_service_name}"
         }
 
         resources {

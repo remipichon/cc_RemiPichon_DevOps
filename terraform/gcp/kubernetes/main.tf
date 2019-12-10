@@ -1,5 +1,8 @@
 module "network" {
   source = "./network"
+
+  dns_zone_name = "${var.dns_zone_name}"
+  zone_name = "main-public-zone"
 }
 
 module "cluster" {
@@ -8,37 +11,26 @@ module "cluster" {
   cluster_name = "main-cluster"
 }
 
-//TODO network and cluster in a separate root module
+module "jenkins" {
+  source = "./jenkins"
 
-//app in another one
+  dns_zone_name = "${module.network.dns_zone_name}"
+  dns_name = "${module.network.dns_name}"
+  service_name = "jenkinstest"
+  image_url = "gcr.io/zenhubviaconsole/jenkins" //TODO use the one in Dockerhub
+  gcp_project = "${var.project}"
 
-//jenkins in another on
 
-
+  app_service_name = "${var.application_service_name}"
+  app_source_repo = "${var.app_repo}"
+  app_image_name = "${var.application_image_name}"
+}
 
 module "app_api" {
   source = "./app"
 
   dns_zone_name = "${module.network.dns_zone_name}"
   dns_name = "${module.network.dns_name}"
-  service_name = "api"
-  image_name = "app_api"
+  service_name = "${var.application_service_name}"
+  image_name = "${var.application_image_name}"
 }
-
-module "jenkins" {
-  source = "./jenkins"
-
-  dns_zone_name = "${module.network.dns_zone_name}"
-  dns_name = "${module.network.dns_name}"
-  service_name = "jenkins"
-  image_name = "jenkins"
-  app_repo = "${var.app_repo}"
-  gcp_project = "${var.project}"
-}
-
-output "jenkins_admin_pass" {
-  value = "${module.jenkins.jenkins_admin_pass}"
-}
-
-
-//via VM -m)x:fK(rBKcu^7C

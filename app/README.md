@@ -15,7 +15,7 @@ docker stack deploy --compose-file docker-compose.yml app
  
 ```
 
-Working on the app code
+Working on the app code and restarting service
 ```
 docker-compose build && docker-compose push && docker service update --force app_api
 ```
