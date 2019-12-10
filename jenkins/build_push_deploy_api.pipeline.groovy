@@ -1,7 +1,7 @@
 pipeline {
   parameters {
     choice(
-      choices: ['swarm', 'gpc'],
+      choices: ['swarm', 'gcp'],
       description: 'Either deploy on Docker Swarm on which Jenkins is running or to Google Cloud',
       name: 'DEPLOY_TARGET'
     )

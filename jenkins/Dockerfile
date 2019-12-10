@@ -13,16 +13,17 @@ RUN curl https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKERV
 #RUN usermod -a -G root jenkins
 #USER jenkins
 
-# install Google Cloud Cli
-COPY install_gcp_cli.sh install_gcp_cli.sh
-RUN ./install_gcp_cli.sh
+# install Google Cloud Cli and Kubectl
+RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && apt-get update -y && apt-get install google-cloud-sdk -y
+RUN apt-get install kubectl
 
 # skip setup wizard
 ENV JAVA_OPTS "-Djenkins.install.runSetupWizard=false"
 
-# defines users
+# defines users (admin pass has to be overridden is order to be created at runtime)
 ENV JENKINS_ADMIN admin
-ENV JENKINS_ADMIN_PASS TEST
+#TODO don't leave test here
+ENV JENKINS_ADMIN_PASS "test"
 ENV JENKINS_USER ""
 ENV JENKINS_USER_PASS ""
 
