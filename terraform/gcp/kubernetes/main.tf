@@ -17,7 +17,7 @@ module "jenkins" {
   dns_zone_name = "${module.network.dns_zone_name}"
   dns_name = "${module.network.dns_name}"
   service_name = "jenkins"
-  image_url = "gcr.io/zenhubviaconsole/jenkins" //TODO use the one in Dockerhub
+  image_url = "remipichon/assignment-jenkins"
 
   gcp_project = "${var.project}"
   app_service_name = "${var.application_service_name}"

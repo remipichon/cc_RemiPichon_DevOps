@@ -111,7 +111,7 @@ It will provision on GCP:
 * a replication controller + service + dns records for the App api
 
 If the DNS zone you provided is working (you own it, configured the Google DNS server records and waited for the DNS propagation)
-then Jenkins is available at __http://jenkins.<DNSzone>__ and once deployed the app will be available at __http://<application_service_name>.<DNSzone>__.
+then Jenkins is available at __http://jenkins.{DNSzone}__ and once deployed the app will be available at __http://{application_service_name}.{DNSzone}__.
 
 If the DNS zone is not working for you, you can find the K8s service public ips with
 ```
