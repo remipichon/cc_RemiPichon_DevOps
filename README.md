@@ -184,39 +184,7 @@ Also, an easy task would be to setup a remote backend to securely store the stat
 The *app* could use a health check to help deployment (rolling update waits for healthiness)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//via VM -m)x:fK(rBKcu^7C
-
-
-
-
-
-
-
-
-# sandox
-
+# sandbox
 
 Build and ship
 ```
@@ -228,8 +196,8 @@ docker push remipichon/assignment-jenkins
  
 ```
 
-
-
+Test Cmd on Jenkins
+```
 cmd = "kubectl rolling-update api --image gcr.io/zenhubviaconsole/app_api"
 //cmd = "kubectl config current-context"
 //cmd = "gcloud container clusters get-credentials main-cluster --zone us-central1-a	"
@@ -243,98 +211,4 @@ def proc = cmd.execute()
 proc.consumeProcessOutput(sout, serr)
 proc.waitForOrKill(10000)
 println "out> $sout err> $serr"
-
-
-
-# install 
-
-* google cloud cli on local
-
-* google cloud cli on Jenkins
-https://gist.github.com/satyadeepk/b0146a0ccefc87fc41a86ea7250ec23e
 ```
-#Ref: https://github.com/circleci/android-cloud-test-lab/blob/master/circle.yml
-
-export DIRECTORY="/var/jenkins_home/GoogleCloudSDK/google-cloud-sdk/bin"
-if [ ! -d "$DIRECTORY" ]; then
-  # Control will enter here if $DIRECTORY doesn't exist.
-	cd /var/jenkins_home
-	wget https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip -O google-cloud-sdk.zip
-	unzip -o google-cloud-sdk.zip -d ./GoogleCloudSDK/
-	./GoogleCloudSDK/google-cloud-sdk/install.sh
-	
-fi
-export PATH=/var/jenkins_home/GoogleCloudSDK/google-cloud-sdk/bin:$PATH
-
-gcloud --quiet components update
-gcloud --quiet components install kubectl
-
-# do this in the pipeline
-#gcloud auth activate-service-account --key-file $GCLOUD_SERVICE_AUTH
-#gcloud config set project addodoc-1
-
-```
-
-gcloud container clusters get-credentials main-cluster --zone us-central1-a
-kubectl config current-context main-cluster
-
-* creds on Jenkins
-via permissions
-
-
-docker run --env APP_REPO=https://github.com/remipichon/cc_RemiPichon_DevOps.git --env "JENKINS=73g#:KP7aMxYAGouMIP**@2o]v+@Fe?<O" --env GCP_PROJECT=zenhubviaconsole --privileged remipichon/assignment-jenkins
-
-
-
-- name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /var/secrets/google/zenhub_travis_key.json
-        - name: _ADMIN_PASS
-          value: 73g#:KP7aMxYAGouMIP**@2o]v+@Fe?<O5[e9S?Re{u7?fR:cRLF_t1guf5h+}ab
-        - name: 
-          value: 
-        - name: 
-          value: 
-
-deploy to k8s
-
-```
-#gcloud container clusters get-credentials main-cluster --zone europe-west1-b
-    
-# build and push, do it via shell on Jenkins (+ permissions)    
-docker build -t gcr.io/zenhubviaconsole/app_api .
-gcloud auth configure-docker
-docker push gcr.io/zenhubviaconsole/app_api
-
-
-   = OR = 
-gcloud docker -- push gcr.io/zenhubviaconsole/hello-app:v1
-    
-   
-    how to simply update the image ? the service already exists
-kubectl run hello-app \
-    --image=gcr.io/zenhubviaconsole/hello-app:v1 \
-    --port=8080        
-    
-    
-```
-
-
-```
-export GOOGLE_CLOUD_KEYFILE_JSON=$HOME/.gcp/credentials/ZenhubViaConsole.json
-terraform init
-```
-
-
-
-
-
-
-
-
-
-
-# last check
-
-Vagrant
-    Jenkins
-        privileged or share Docker Socket
