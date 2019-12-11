@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y apt-transport-https ca-certificates cur
      	stable" && \
   		apt-get update && \
 			apt-get install -y docker-ce docker-ce-cli containerd.io
-RUN systemctl enable docker
+#RUN systemctl enable docker # dont' start the daemon has it is not used when deployed on Vagrant
 #RUN usermod -a -G root jenkins
 #USER jenkins
 
