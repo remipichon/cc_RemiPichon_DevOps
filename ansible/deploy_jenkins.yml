@@ -39,6 +39,8 @@
           - source: jenkins_home
             target: /var/jenkins_home
             type: volume
+          - source: /var/run/docker.sock
+            target: /var/run/docker.sock
         publish:
           - published_port: 8080
             target_port: 8080
@@ -46,7 +48,7 @@
           JENKINS_ADMIN_PASS: adminp@ass
           DEPLOY_TARGET: swarm
           APP_SOURCE_REPO: https://github.com/remipichon/cc_RemiPichon_DevOps
-          APP_IMAGE_NAME: jenkins
-          APP_SERVICE_NAME: jenkins
-        privileged: true
+          APP_IMAGE_NAME: app
+          APP_SERVICE_NAME: app
+
 

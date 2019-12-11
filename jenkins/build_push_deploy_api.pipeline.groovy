@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Checkout source') {
       steps {
-        git branch: "master", url: env.APP_REPO
+        git branch: "master", url: env.APP_SOURCE_REPO
       }
     }
 
@@ -64,8 +64,8 @@ pipeline {
       }
       steps {
         sh 'gcloud container clusters get-credentials '+ env.CLUSTER_NAME +' --zone us-central1-a'
-        sh 'kubectl rolling-update ' + env.APP_SERVICE_NAME + ' --zone ' +  env.ZONE +
-          '--image-pull-policy Always --image gcr.io/' + env.GCP_PROJECT + "/" + env.APP_IMAGE_NAME
+        sh 'kubectl rolling-update ' + env.APP_SERVICE_NAME +
+          ' --image-pull-policy Always --image gcr.io/' + env.GCP_PROJECT + "/" + env.APP_IMAGE_NAME
       }
     }
 

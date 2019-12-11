@@ -52,11 +52,13 @@ vagrant up
 You will have a Vagrant based on Ubuntu with
 * Docker and Docker Swarm cluster enabled
 * Jenkins available on port 8080 (localhost:8080) 
-  * user is admin/adminp@ass
+  * user is **admin/adminp@ass**
   * there is ready to use "build_push_deploy_api" to build the app (in app director) and deploy it to Docker Swarm
 * once deployed the Hello World app is available at localhost:3000
 
 > port 3000 and 8080 should be available on the host for Vagrant to bind
+
+> building Jenkins can take time, especially on bad internet... (pull Jenkins image, download Docker daemon, download Gcloud and Kubectl)
   
 ### Under the hood
 
@@ -66,7 +68,7 @@ Vagrant uses Ansible playbooks to
 
 The custom Jenkins features:
 * create an admin user at startup
-* Docker (client and daemon) TODO docker socket or not !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+* Docker client using the Daemon available on the host (Vagrant) to build and push Docker image and deploy Docker Stack
 * create at startup a preconfigured CD pipeline which
     * clone "https://github.com/remipichon/cc_RemiPichon_DevOps"
     * build the app (under app directory) using Docker
@@ -114,9 +116,14 @@ terraform output app_ip
 Terraform is used to create all the Google Cloud Platform resources. The app and Jenkins are running in Docker like in
 the Vagrant installation but are orchestrated by Kubernetes instead of Swarm. 
 
-The custom Jenkins is the same as the one used in Vagrant, please note that is also have
+The custom Jenkins is the same as the one used in Vagrant, please note that it also has
 * gcloud, the GCP CLI
 * kubectl, the Kubernets CLI
+* Docker Daemon fully setup
+
+> We cannot use the Docker socket and rely on the Docker daemon from the host while running on Kubernetes. Instead, the
+Jenkins container run in "privileged" mode use a Docker daemon in Docker. 
+
 
 The pipeline is configured via environment variables, injected in the container. The _DEPLOY_TARGET_ allows to switch 
 between GCP and Swarm. Terraform deploys Jenkins configured for GCP, the only differences are
@@ -125,6 +132,24 @@ between GCP and Swarm. Terraform deploys Jenkins configured for GCP, the only di
 
 > Because the app Docker image is not present on GCR when you terraform apply for the first time, the app replication 
 controller will fails to work. You should trigger the "build_push_deploy_api" Jenkins Pipeline at least once
+
+For the convenience, the custom Jenkins app has been pushed to the public Docker Registry at 'remipichon/assignment-jenkins' 
+and used in Kubernetes to deploy Jenkins. If you wish to work on the custom Jenkins pleace build and push to GCR with
+```
+cd jenkins
+docker build -t gcr.io/zenhubviaconsole/jenkins .
+gcloud auth configure-docker
+docker push gcr.io/zenhubviaconsole/jenkins 
+```
+and update the attribute __image_url__ for the module __jenkins__ in the file "terraform/gcp/kubernetes/main.tf" then
+```
+terraform plan
+terraform apply
+kubectl rolling-update jenkins --image gcr.io/<your_project>/jenkins --image-pull-policy Always
+```
+
+> running the rolling update would be enough to use the new image, wep, that's a flaw, Terraform is not the only source 
+of truth
 
 
 ## Going Forward

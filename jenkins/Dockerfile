@@ -28,12 +28,19 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.c
 ENV JAVA_OPTS "-Djenkins.install.runSetupWizard=false"
 
 # defines users (admin pass has to be overridden is order to be created at runtime)
+# all other variable allows to configure Jenkins Pipeline
 ENV JENKINS_ADMIN admin
 ENV JENKINS_ADMIN_PASS ""
 ENV JENKINS_USER ""
 ENV JENKINS_USER_PASS ""
+ENV DEPLOY_TARGET ""
+ENV APP_SOURCE_REPO ""
+ENV APP_IMAGE_NAME ""
+ENV APP_SERVICE_NAME ""
+# GCP only
 ENV GCP_PROJECT ""
-ENV APP_REPO ""
+ENV CLUSTER_NAME ""
+ENV ZONE ""
 
 # creating default users
 COPY create_user.groovy /usr/share/jenkins/ref/init.groovy.d/

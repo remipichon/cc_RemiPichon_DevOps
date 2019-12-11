@@ -16,14 +16,15 @@ module "jenkins" {
 
   dns_zone_name = "${module.network.dns_zone_name}"
   dns_name = "${module.network.dns_name}"
-  service_name = "jenkinstest"
+  service_name = "jenkins"
   image_url = "gcr.io/zenhubviaconsole/jenkins" //TODO use the one in Dockerhub
+
   gcp_project = "${var.project}"
-
-
   app_service_name = "${var.application_service_name}"
   app_source_repo = "${var.app_repo}"
   app_image_name = "${var.application_image_name}"
+  cluster_name = "${module.cluster.cluster.name}"
+  cluster_zone = "${module.cluster.cluster.zone}"
 }
 
 module "app_api" {

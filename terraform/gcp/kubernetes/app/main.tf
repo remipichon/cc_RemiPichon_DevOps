@@ -18,7 +18,7 @@ resource "kubernetes_replication_controller" "api" {
 
     selector = {
       app  = "${var.service_name}"
-      tier = "api"
+      tier = "frontend"
     }
 
     template {
@@ -54,7 +54,7 @@ resource "kubernetes_service" "api" {
   spec {
     selector = {
       app  = "${var.service_name}"
-      tier = "api"
+      tier = "frontend"
     }
 
     type = "LoadBalancer"

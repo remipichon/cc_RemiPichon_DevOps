@@ -3,6 +3,6 @@ version: '3'
 services:
   api:
     build: .
-    image: 127.0.0.1:5000/app_api
+    image: 127.0.0.1:5000/app
     ports:
       - "3000:3000"

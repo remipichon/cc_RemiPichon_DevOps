@@ -68,12 +68,12 @@ resource "kubernetes_replication_controller" "jenkins" {
 
         env {
           name = "CLUSTER_NAME"
-          value = "???"
+          value = "${var.cluster_name}"
         }
 
         env {
           name = "ZONE"
-          value = ""
+          value = "${var.cluster_zone}"
         }
 
         env {
