@@ -195,3 +195,4 @@ The **Terraform** code is made to be easy to apply once, a more fragmented imple
 Also, an easy task would be to setup a remote backend to securely store the state on Google Cloud Storage 
 
 The **app** could use a health check to help deployment (rolling update waits for healthiness)
+   
